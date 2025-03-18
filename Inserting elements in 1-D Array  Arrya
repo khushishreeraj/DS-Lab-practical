@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+void insertElement(int arr[], int *size, int element, int position) {
+    if (position < 0 || position > *size) {
+        printf("Invalid position!\n");
+        return;
+    }
+    for (int i = *size; i > position; i--) {
+        arr[i] = arr[i - 1];
+    }
+    arr[position] = element;
+    (*size)++;
+}
+
+void displayArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int arr[100], size, element, position;
+    
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    printf("Enter the elements of the array: ");
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    printf("Enter element to insert: ");
+    scanf("%d", &element);
+    printf("Enter position: ");
+    scanf("%d", &position);
+
+    insertElement(arr, &size, element, position);
+
+    printf("Array after insertion: ");
+    displayArray(arr, size);
+
+    return 0;
+}
