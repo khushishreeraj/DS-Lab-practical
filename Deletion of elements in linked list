@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+void printList(struct Node* n) {
+    while (n != NULL) {
+        printf(" %d ", n->data);
+        n = n->next;
+    }
+}
+
+void deletefirst() {
+    if (head == NULL) return;
+    struct Node* temp = head;
+    head = head->next;
+    free(temp);
+}
+
+void deletelast() {
+    if (head == NULL) return;
+    if (head->next == NULL) {
+        free(head);
+        head = NULL;
+        return;
+    }
+
+    struct Node* temp = head;
+    while (temp->next->next != NULL) {
+        temp = temp->next;
+    }
+    free(temp->next);
+    temp->next = NULL;
+}
+
+void deletemiddle(int pos) {
+    if (head == NULL || pos <= 0) return;
+    if (pos == 1) {
+        deletefirst();
+        return;
+    }
+
+    struct Node* temp = head;
+    for (int i = 1; i < pos - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL || temp->next == NULL) return;
+
+    struct Node* nodeToDelete = temp->next;
+    temp->next = temp->next->next;
+    free(nodeToDelete);
+}
+
+int main() {
+    struct Node* second = NULL;
+    struct Node* third = NULL;
+
+    head = (struct Node*)malloc(sizeof(struct Node));
+    second = (struct Node*)malloc(sizeof(struct Node));
+    third = (struct Node*)malloc(sizeof(struct Node));
+
+    head->data = 1;
+    head->next = second;
+
+    second->data = 2;
+    second->next = third;
+
+    third->data = 3;
+    third->next = NULL;
+
+    printf("Original List:");
+    printList(head);
+    printf("\n");
+
+    deletefirst();
+    printf("List after deleting first element:");
+    printList(head);
+    printf("\n");
+
+    deletelast();
+    printf("List after deleting last element:");
+    printList(head);
+    printf("\n");
+
+    struct Node* fourth = (struct Node*)malloc(sizeof(struct Node));
+    fourth->data = 4;
+    fourth->next = NULL;
+
+    if(head != NULL){
+        struct Node* temp = head;
+        while(temp->next != NULL){
+            temp = temp->next;
+        }
+        temp->next = fourth;
+    }
+
+    printf("List after adding a fourth element:");
+    printList(head);
+    printf("\n");
+
+    deletemiddle(2);
+    printf("List after deleting middle element (position 2):");
+    printList(head);
+    printf("\n");
+
+    struct Node* current = head;
+    while (current != NULL) {
+        struct Node* next = current->next;
+        free(current);
+        current = next;
+    }
+    head = NULL;
+    return 0;
+}
